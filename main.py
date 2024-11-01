@@ -53,26 +53,124 @@ def evercodelab():
     # print(len(result))
 
     template = '''
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CMC but not SimpleSwap </title>
-        <style>
-            body { font-family: Arial, sans-serif; background-color: #f4f7fa; color: #333; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-            .table-container { width: 100%; max-width: 800px; background-color: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow-x: auto; }
-            table { width: 100%; border-collapse: collapse; }
-            th { background-color: #4CAF50; color: white; font-weight: bold; padding: 10px; text-align: left; border-bottom: 2px solid #ddd; position: sticky; top: 0; }
-            td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-            tr:hover { background-color: #f1f1f1; }
-            td:nth-child(2) { text-align: right; font-weight: bold; }
-            h2 { text-align: center; margin-top: 10px; color: #333; }
-        </style>
-    </head>
-    <body>
-        <div class="table-container">
-            <table>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMC but not SimpleSwap</title>
+    <meta name="description" content="Tokens listed on CMC but not available on SimpleSwap sorted by 24h vol">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        
+        .content {
+            width: 100%;
+            max-width: 1024px;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 0 64px;
+            box-sizing: border-box;
+        }
+        
+        .table-container {
+            width: 100%;
+            max-width: 1024px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+            position: sticky;
+            top: 0;
+        }
+        
+        td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        td:nth-child(2) {
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        /* Styles for links */
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            color: #0056b3;
+        }
+        
+        a:visited {
+            color: #6c757d;
+        }
+        
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .content, .table-container {
+                margin-bottom: 15px;
+            }
+            
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            th, td {
+                font-size: 12px;
+                padding: 6px;
+            }
+            .content {
+                padding: 0 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>CMC but not SimpleSwap</h1>
+        <p>Tokens listed on CMC but not available on SimpleSwap sorted by 24h vol</p>
+    </div>
+    <div class="table-container">
+        <table>
             <tr>
                 <td>Coin</td>
                 <td>Vol 24h</td>
@@ -83,10 +181,13 @@ def evercodelab():
                 <td>{{ "${:,.0f}".format(coin['volume_24h']) }}</td>
             </tr>
             {% endfor %}
-            </table>
-        </div>
-    </body>
-    </html>
+        </table>
+    </div>
+</body>
+</html>
+
+
+
     '''
     return render_template_string(template, result=result)
 
