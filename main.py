@@ -80,7 +80,7 @@ def evercodelab():
             {% for coin in result %}
             <tr>
                 <td><a href="{{ coin['url'] }}" target="_blank">{{ coin['symbol'] }}</a></td>
-                <td>{{ "${:,.2f}".format(coin['volume_24h']) }}</td>
+                <td>{{ "${:,.0f}".format(coin['volume_24h']) }}</td>
             </tr>
             {% endfor %}
             </table>
