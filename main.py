@@ -24,7 +24,8 @@ def get_ss_symbols():
                 if symbol_upper.startswith('$'):
                     symbols.add(symbol_upper[1:])
 
-    print(symbols)
+    # print(symbols)
+
     return symbols
 
 @app.route('/evercodelab')
@@ -48,7 +49,8 @@ def evercodelab():
             result.append({'symbol': symbol, 'volume_24h': volume_24h, 'url': coin_url})
 
     result.sort(key=lambda x: x['volume_24h'], reverse=True)
-    print(len(result))
+
+    # print(len(result))
 
     template = '''
     <!DOCTYPE html>
