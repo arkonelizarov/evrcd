@@ -13,21 +13,18 @@ def get_cmc_coins():
 def get_ss_symbols():
     url = 'https://simpleswap.io/api/v3/currencies?fixed=false&includeDisabled=false'
     data = requests.get(url).json()
+
     symbols = set()
 
     for coin in data:
-        symbol = coin.get('cmcTicker')
-        if symbol:
-            symbols.add(symbol.upper())
+        for symbol in [coin.get('cmcTicker'), coin.get('symbolFront'), coin.get('symbol')]:
+            if symbol:
+                symbol_upper = symbol.upper()
+                symbols.add(symbol_upper)
+                if symbol_upper.startswith('$'):
+                    symbols.add(symbol_upper[1:])
 
-        symbol_front = coin.get('symbolFront')
-        if symbol_front:
-            symbols.add(symbol_front.upper())
-
-        symb = coin.get('symbol')
-        if symb:
-            symbols.add(symb.upper())
-
+    print(symbols)
     return symbols
 
 @app.route('/evercodelab')
@@ -38,17 +35,21 @@ def evercodelab():
     result = []
     for coin in cmc_coins:
         symbol = coin['symbol'].upper()
-        if symbol not in ss_symbols:
+        symbol_no_dollar = symbol[1:] if symbol.startswith('$') else symbol
+
+        if symbol not in ss_symbols and symbol_no_dollar not in ss_symbols:
             volume_24h = 0
             quotes = coin.get('quotes', [])
             for quote in quotes:
                 if quote.get('name') == 'USD':
                     volume_24h = quote.get('volume24h', 0)
                     break
-            result.append({'symbol': symbol, 'volume_24h': volume_24h})
+            coin_url = f"https://coinmarketcap.com/currencies/{coin['slug']}/"
+            result.append({'symbol': symbol, 'volume_24h': volume_24h, 'url': coin_url})
 
     result.sort(key=lambda x: x['volume_24h'], reverse=True)
     print(len(result))
+
     template = '''
     <!DOCTYPE html>
     <html lang="en">
@@ -71,15 +72,15 @@ def evercodelab():
         <div class="table-container">
             <table>
             <tr>
-                    <td>Coin</td>
-                    <td>Vol 24h</td>
-                </tr>
-                {% for coin in result %}
-                <tr>
-                    <td>{{ coin['symbol'] }}</td>
-                    <td>{{ "${:,.2f}".format(coin['volume_24h']) }}</td>
-                </tr>
-                {% endfor %}
+                <td>Coin</td>
+                <td>Vol 24h</td>
+            </tr>
+            {% for coin in result %}
+            <tr>
+                <td><a href="{{ coin['url'] }}" target="_blank">{{ coin['symbol'] }}</a></td>
+                <td>{{ "${:,.2f}".format(coin['volume_24h']) }}</td>
+            </tr>
+            {% endfor %}
             </table>
         </div>
     </body>
